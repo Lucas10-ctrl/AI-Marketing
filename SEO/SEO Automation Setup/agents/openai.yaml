@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hermes SEO Setup"
+  short_description: "Build a secure SEO agent through a Kanban workflow"
+  default_prompt: "Set up my Hermes SEO system using the Kanban board."
