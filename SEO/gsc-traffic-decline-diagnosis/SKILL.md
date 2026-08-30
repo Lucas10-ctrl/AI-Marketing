@@ -1,7 +1,7 @@
 ---
 name: gsc-traffic-decline-diagnosis
 description: Diagnose organic traffic drops with Composio GSC data.
-version: 1.0.0
+version: 1.0.1
 author: Lucas (Lucas10-ctrl), Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -14,13 +14,13 @@ metadata:
 
 # GSC Traffic Decline Diagnosis
 
-Use Google Search Console data gathered through Composio MCP to diagnose an organic search traffic decline. Complete the first five diagnostic steps, distinguish observations from causes, and return a read-only evidence report rather than changing the site or Search Console.
+Use Google Search Console data gathered through Composio MCP to diagnose an organic search traffic decline. Complete the four diagnostic steps, distinguish observations from causes, and return a read-only evidence report rather than changing the site or Search Console.
 
 ## When to Use
 
 - Organic clicks, impressions, CTR, or rankings appear to have declined.
 - The user wants an AI agent to compare Search Console periods and isolate affected pages or queries.
-- The user needs a reproducible loss inventory before commissioning technical, content, cannibalization, or competitor analysis.
+- The user needs a reproducible diagnosis before commissioning technical, content, cannibalization, or competitor analysis.
 
 Do not use this skill for GA4-only traffic changes, live rank tracking, or implementing recovery changes. Load the dedicated cannibalization or competitor-gap skill only after this diagnosis supports that next step.
 
@@ -40,7 +40,7 @@ Establish:
 - Search Console property
 - affected search type, default `web`
 - current and comparison periods
-- optional country, device, directory, page group, or business-priority filters
+- optional country, device, directory, or page-group filters
 
 Unless the user supplies dates, use the latest 28 complete days ending three days ago and the preceding 28 days. For a seasonal business, also compare the same dates one year earlier when retained data permits. State all date choices and note that recent Search Console data may be incomplete.
 
@@ -58,17 +58,7 @@ If more than one plausible property is connected, ask the user to select one. Ne
 
 **Complete when:** the report states whether a sustained decline exists, the exact periods and search type, and the click and impression deltas.
 
-### 2. Measure the size and business impact
-
-1. Query both periods with `page` as the dimension under identical settings.
-2. Join rows by exact URL. For each page calculate clicks lost or gained, impression change, CTR change in percentage points, and average-position change.
-3. Sort by absolute clicks lost, then flag pages responsible for most of the decline.
-4. Apply business-role labels supplied by the user: direct commercial, assisted demand, informational/discovery, or unknown. URL-based labels are provisional and must be marked as assumptions.
-5. Keep SEO loss and business impact separate. Do not claim revenue or conversion impact without analytics or CRM evidence.
-
-**Complete when:** a page-level loss inventory identifies the URLs driving the decline and separates measured SEO loss from known or unknown business value.
-
-### 3. Segment the decline
+### 2. Segment the decline
 
 Run separate, comparable Search Analytics queries for useful dimensions so broad totals do not hide a concentrated loss:
 
@@ -86,7 +76,7 @@ Group queries by searcher task only after preserving the exact-query data. Label
 
 **Complete when:** the report names the page, query, search type, device, country, or appearance segments that explain the loss and identifies segments that remained stable or improved.
 
-### 4. Compare clicks, impressions, CTR, and average position
+### 3. Compare clicks, impressions, CTR, and average position
 
 Classify each priority page/query segment using all four metrics:
 
@@ -103,7 +93,7 @@ Use weighted period aggregates returned by Search Console. Never take a simple a
 
 **Complete when:** every priority loss has an evidence pattern, a first hypothesis, an explicit uncertainty, and a recommended next check.
 
-### 5. Check Search status, manual actions, and security
+### 4. Check Search status, manual actions, and security
 
 Composio's current Google Search Console toolkit exposes analytics, site, sitemap, and URL-inspection tools, but may not expose Manual Actions or Security Issues reports. Do not pretend those reports were checked through MCP.
 
@@ -121,15 +111,14 @@ Return these sections:
 
 1. **Diagnosis summary** — property, periods, search type, sustained-drop result, and leading evidence pattern.
 2. **Period comparison** — clicks, impressions, CTR, and average position for each period with absolute and percentage/percentage-point deltas.
-3. **Page loss inventory** — priority URLs, measured losses, provisional business role, and share of total click loss.
-4. **Segment findings** — query, page/query, country, device, search appearance, and search-type findings.
-5. **Hypothesis matrix**:
+3. **Segment findings** — query, page/query, country, device, search appearance, and search-type findings.
+4. **Hypothesis matrix**:
 
 | Priority | Segment | Evidence | Classification | First hypothesis | Evidence that would weaken it | Next check |
 |---|---|---|---|---|---|---|
 
-6. **Search status** — URL inspection and sitemap findings plus explicit Manual Actions and Security Issues verification state.
-7. **Recommended next analysis** — only evidence-supported follow-ups, including the dedicated cannibalization or competitor-gap skill when appropriate.
+5. **Search status** — URL inspection and sitemap findings plus explicit Manual Actions and Security Issues verification state.
+6. **Recommended next analysis** — only evidence-supported follow-ups, including the dedicated cannibalization or competitor-gap skill when appropriate.
 
 ## Pitfalls
 
@@ -138,7 +127,6 @@ Return these sections:
 - Zero rows can mean no impressions, an invalid filter, a property mismatch, insufficient access, or unavailable data.
 - Average position is an aggregate, not a literal rank tracker.
 - Search Analytics does not prove why rankings or clicks changed.
-- Search Console cannot supply business value without conversion or revenue data.
 - Multiple URLs for one query are candidates for cannibalization analysis, not proof.
 - Do not use mutating Composio tools such as Add Site, Delete Site, Submit Sitemap, or any indexing action during diagnosis.
 
