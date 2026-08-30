@@ -1,7 +1,7 @@
 ---
 name: gsc-traffic-decline-diagnosis
 description: Diagnose organic traffic drops with Composio GSC data.
-version: 1.0.1
+version: 1.0.2
 author: Lucas (Lucas10-ctrl), Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -14,7 +14,7 @@ metadata:
 
 # GSC Traffic Decline Diagnosis
 
-Use Google Search Console data gathered through Composio MCP to diagnose an organic search traffic decline. Complete the four diagnostic steps, distinguish observations from causes, and return a read-only evidence report rather than changing the site or Search Console.
+Use Google Search Console data gathered through Composio MCP to diagnose an organic search traffic decline. Complete the four diagnostic steps, distinguish observations from causes, and write a read-only evidence report rather than changing the site or Search Console.
 
 ## When to Use
 
@@ -105,9 +105,18 @@ Composio's current Google Search Console toolkit exposes analytics, site, sitema
 
 **Complete when:** accessible Composio status evidence is recorded and Manual Actions and Security Issues are truthfully labeled as verified or not verified.
 
-## Output
+## Report Artifact
 
-Return these sections:
+After completing the analysis, create a Markdown report with `write_file`. Do not stop at a chat summary.
+
+- Save it as `reports/gsc-traffic-decline-<property-slug>-<current-period-end>.md` in the current workspace.
+- Convert the property to a safe lowercase slug by removing the protocol and `sc-domain:` prefix and replacing non-alphanumeric runs with hyphens.
+- Use the current comparison period's end date in `YYYY-MM-DD` format.
+- If that path already exists, append a UTC timestamp to the filename rather than overwriting an earlier report.
+- Keep the report self-contained. Include the inputs, evidence, calculations, limitations, and next actions needed to understand it without reading the chat.
+- Do not include OAuth tokens, MCP URLs, Composio API keys, or unredacted account identifiers.
+
+The report must contain these sections:
 
 1. **Diagnosis summary** — property, periods, search type, sustained-drop result, and leading evidence pattern.
 2. **Period comparison** — clicks, impressions, CTR, and average position for each period with absolute and percentage/percentage-point deltas.
@@ -119,6 +128,8 @@ Return these sections:
 
 5. **Search status** — URL inspection and sitemap findings plus explicit Manual Actions and Security Issues verification state.
 6. **Recommended next analysis** — only evidence-supported follow-ups, including the dedicated cannibalization or competitor-gap skill when appropriate.
+
+After writing the file, return a short chat summary with the diagnosis, the report path, and any checks still marked `not verified`. The Markdown file is the primary deliverable.
 
 ## Pitfalls
 
@@ -143,3 +154,5 @@ Before finishing:
 - every causal statement is labeled as a hypothesis unless independently verified
 - Manual Actions and Security Issues are marked `not verified` unless they were actually checked
 - no site, Search Console, sitemap, or indexing setting was changed
+- the Markdown report exists at the reported path and contains all six required sections
+- the final response links or names the exact report path
